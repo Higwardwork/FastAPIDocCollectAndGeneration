@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  web:
+    container_name: template_gen
+    build:
+      ./src
+    command:
+      uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - template_data:C:/Template_Data/
+    expose:
+      - 8000
+    env_file:
+      - ./.env/.env
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.entrypoints=http"
+      - "traefik.http.routers.dashboard.rule=Host(`localhost:8001`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$321J6UJd$$BQNAotYJXYmEAURCvtOfW."
+
+volumes:
+  template_data:
