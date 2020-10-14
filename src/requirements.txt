@@ -6,6 +6,7 @@ uvicorn
 aiosqlite
 python-multipart
 aiofiles
+docxtpl
 
 # dev
 pytest==5.3.2

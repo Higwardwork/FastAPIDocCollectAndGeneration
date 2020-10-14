@@ -40,8 +40,8 @@ async def delete(id: int):
 
 
 # Files
-async def post_file(payload: FileSchema):
-    query = files.insert().values(name=payload.name, description=payload.description, extension=payload.extension)
+async def post_file(payload):
+    query = files.insert().values(name=payload["name"], description=payload["description"], extension=payload["extension"], path=payload["path"],t_id=payload["t_id"])
     return await database.execute(query=query)
 
 
@@ -51,5 +51,6 @@ async def get_file(id: int):
 
 
 async def get_file_by_template(t_id: int, file_type: FileExtension):
-    query = files.select().where(t_id == files.c.t_id).where(file_type == files.c.extension)
+    query = files.select().where(t_id == files.c.id)
+    print(query)
     return await database.fetch_one(query=query)
